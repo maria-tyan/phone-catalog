@@ -70,7 +70,7 @@ export default {
       return this.brandList.options.filter((item) => item.id === this.selectedBrand);
     },
     optionList() {
-      return new Set(this.brandList.options.map((item) => item.id));
+      return this.brandList.options ? new Set(this.brandList.options.map((item) => item.id)) : [];
     },
   },
   methods: {
