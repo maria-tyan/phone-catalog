@@ -8,7 +8,7 @@
 
         <div id="nav">
           <router-link class="nav__item" to="/">Home</router-link>
-          <router-link class="nav__item" to="/brands">Brand</router-link>
+          <router-link class="nav__item" to="/brands">Brands</router-link>
         </div>
       </div>
     </header>

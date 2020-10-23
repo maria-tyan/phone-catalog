@@ -1,6 +1,7 @@
 <template>
   <div class="brands-page">
-    <BrandsComponent />
+    <router-view v-if="$route.params.brand" />
+    <BrandsComponent v-else />
   </div>
 </template>
 

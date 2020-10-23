@@ -4,6 +4,7 @@
   justify-content: center;
   align-items: center;
   background-color: darkslateblue;
+  border: none;
   color: white;
   width: 150px;
   height: 40px;
@@ -15,6 +16,17 @@
   cursor: pointer;
   transition: opacity .5s ease-in;
   overflow: hidden;
+
+  &_remove {
+    position: absolute;
+    left: auto;
+    right: 0;
+    top: 0;
+    font-size: 30px;
+    font-weight: 700;
+    width: 40px;
+    background-color: firebrick;
+  }
 
   &:hover {
     opacity: .8;

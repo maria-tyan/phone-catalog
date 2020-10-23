@@ -2,7 +2,7 @@
   <div class="brands">
     <h1 class="title">{{ brandList.headline }}</h1>
     <div>
-      <select name="select" @change="filterList($event)">
+      <select name="select" v-model="selectedBrand">
         <option value="all">
           All
         </option>
@@ -13,9 +13,20 @@
         </template>
       </select>
     </div>
-    <button @click="sortList">Sort List</button>
+    <button
+      class="button"
+      @click="sortList"
+    >
+      Sort List
+    </button>
     <transition-group name="cell" tag="ul" class="brands__list-wrapper">
-      <li class="brands__list-item" v-for="item in userList" :key="item.id">
+      <li class="brands__list-item" v-for="item in filteredItems" :key="item.id">
+        <button
+          class="button button_remove"
+          @click="removeItem(item.id)"
+        >
+          &times;
+        </button>
         <router-link :to="`/brands/${item.displayName}`" :title="item.id">
           <img :src="item.displayImageUrl" :alt="item.id" />
           <p>
@@ -45,18 +56,26 @@ export default {
   data() {
     return {
       brandList: [],
-      optionList: [],
-      userList: [],
+      selectedBrand: 'all',
     };
   },
   async mounted() {
     this.brandList = await this.fetchData('https://raw.githubusercontent.com/TeliaSweden/frontend-interview-api/master/brands.json');
-    this.optionList = new Set(this.brandList.options.map((item) => item.id));
-    this.userList = this.brandList.options;
+  },
+  computed: {
+    filteredItems() {
+      if (this.selectedBrand === 'all') {
+        return this.brandList.options;
+      }
+      return this.brandList.options.filter((item) => item.id === this.selectedBrand);
+    },
+    optionList() {
+      return new Set(this.brandList.options.map((item) => item.id));
+    },
   },
   methods: {
     sortList() {
-      this.userList = this.brandList.options.sort((a, b) => {
+      this.brandList.options = this.brandList.options.sort((a, b) => {
         if (a.displayName > b.displayName) {
           return 1;
         }
@@ -66,12 +85,8 @@ export default {
         return 0;
       });
     },
-    filterList(event) {
-      if (event.target.value === 'all') {
-        this.userList = this.brandList.options;
-      } else {
-        this.userList = this.brandList.options.filter((item) => item.id === event.target.value);
-      }
+    removeItem(id) {
+      this.brandList.options = this.brandList.options.filter((item) => item.id !== id);
     },
   },
 };
@@ -87,22 +102,12 @@ export default {
   }
 
   &__list-item {
+    position: relative;
     padding: 20px;
   }
 }
 
 .cell {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  border: 1px solid white;
-  margin-right: -1px;
-  margin-bottom: -1px;
-  font-size: 16px;
-  font-weight: 700;
-
   &-move {
     transition: transform 1s;
   }
